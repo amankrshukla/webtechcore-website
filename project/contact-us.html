@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us — WebTech Core</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --accent: #4d7cfe;
+      --accent2: #8b5cf6;
+    }
+
+    body {
+      background: #06070d;
+      color: #e9ebf2;
+      font-family: 'Manrope', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    ::selection { background: rgba(108,140,255,0.35); color: #fff; }
+
+    @keyframes wtc-pulse {
+      0%, 100% { opacity: .55; }
+      50%       { opacity: 1; }
+    }
+    @keyframes wtc-fadein {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes wtc-pop {
+      0%   { opacity: 0; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ── Page background decorations ── */
+    .page-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 30%, transparent 80%);
+              mask-image: radial-gradient(ellipse 90% 55% at 50% 0%, #000 30%, transparent 80%);
+      z-index: 0;
+    }
+    .bg-glow {
+      position: fixed;
+      top: -280px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1100px;
+      height: 680px;
+      background: radial-gradient(ellipse at center, var(--accent) 0%, transparent 62%);
+      opacity: 0.2;
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: relative;
+      z-index: 20;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #e9ebf2;
+    }
+    .nav-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 21px;
+      letter-spacing: 0.16em;
+    }
+    .nav-logo-text span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .nav-link {
+      color: #aeb4c7;
+      text-decoration: none;
+      font-size: 15.5px;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+    .nav-link:hover { color: #fff; }
+
+    /* Dropdown trigger */
+    .nav-dropdown {
+      position: relative;
+    }
+    .nav-dropdown-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #aeb4c7;
+      font-family: 'Manrope', sans-serif;
+      font-size: 15.5px;
+      font-weight: 600;
+      padding: 0;
+      transition: color 0.15s;
+    }
+    .nav-dropdown-btn.open,
+    .nav-dropdown-btn:hover { color: #fff; }
+    .nav-dropdown-btn .caret {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+    .nav-dropdown-btn.open .caret { transform: rotate(180deg); }
+
+    /* Dropdown panels */
+    .dropdown-panel {
+      display: none;
+      position: absolute;
+      top: 42px;
+      z-index: 30;
+      padding: 16px;
+      background: rgba(14,16,28,0.97);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      box-shadow: 0 24px 60px -18px rgba(0,0,0,0.7);
+      animation: wtc-fadein 0.18s ease-out;
+    }
+    .dropdown-panel.open { display: block; }
+
+    /* Industries & Services: wide panels anchored to nav left */
+    .panel-wide {
+      /* positioned relative to nav via JS; width set inline */
+      width: 980px;
+      max-width: calc(100vw - 64px);
+    }
+    /* Resources: narrow, anchored to its own button */
+    .panel-resources {
+      width: 320px;
+      max-width: 90vw;
+      left: 0;
+    }
+
+    .panel-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      color: #7c8398;
+      padding: 6px 12px 12px;
+    }
+    .panel-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .panel-grid-1 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+    .panel-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 11px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #aeb4c7;
+      transition: background 0.12s;
+    }
+    .panel-item:hover { background: rgba(255,255,255,0.05); }
+    .panel-item .icon { font-size: 16px; line-height: 1; flex-shrink: 0; }
+    .panel-item .name { display: block; font-size: 14px; font-weight: 600; }
+    .panel-item .sub  { display: block; font-size: 11.5px; color: #7c8398; }
+
+    .panel-footer-link {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      background: rgba(77,124,254,0.07);
+      transition: background 0.12s;
+    }
+    .panel-footer-link:hover { background: rgba(77,124,254,0.13); }
+
+    /* CTA button */
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 12px 22px;
+      border-radius: 11px;
+      box-shadow: 0 8px 28px -8px var(--accent);
+      transition: filter 0.15s;
+    }
+    .nav-cta:hover { filter: brightness(1.08); }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      z-index: 4;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 64px 32px 8px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 100px;
+      background: rgba(255,255,255,0.03);
+      font-family: 'Space Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.08em;
+      color: #aeb4c7;
+    }
+    .hero-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      animation: wtc-pulse 2.4s infinite;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 22px auto 0;
+      max-width: 760px;
+    }
+    .hero h1 .gradient {
+      background: linear-gradient(100deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 17.5px;
+      line-height: 1.6;
+      color: #aeb4c7;
+      margin: 20px auto 0;
+      max-width: 580px;
+    }
+
+    /* ── Contact body ── */
+    .contact-body {
+      position: relative;
+      z-index: 4;
+      max-width: 1200px;
+      margin: 48px auto 0;
+      padding: 0 32px;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Info cards */
+    .info-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .info-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.025);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .info-card-icon {
+      flex: none;
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(77,124,254,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .info-card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #7c8398;
+    }
+    .info-card-value {
+      font-size: 15px;
+      font-weight: 600;
+      margin-top: 3px;
+    }
+    .reply-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      background: linear-gradient(140deg, rgba(77,124,254,0.08), rgba(255,255,255,0.02));
+      padding: 24px;
+    }
+    .reply-badge {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .reply-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 9px #34d399;
+      animation: wtc-pulse 2s infinite;
+    }
+    .reply-badge-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.06em;
+      color: #34d399;
+    }
+    .reply-card p {
+      font-size: 13.5px;
+      color: #aeb4c7;
+      line-height: 1.6;
+      margin-top: 10px;
+    }
+
+    /* Form card */
+    .form-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 22px;
+      background: linear-gradient(160deg, #0d1020, #0a0b14);
+      padding: 38px;
+    }
+    .form-card-glow {
+      position: absolute;
+      top: -140px;
+      right: -60px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, var(--accent), transparent 62%);
+      opacity: 0.16;
+      filter: blur(30px);
+      pointer-events: none;
+    }
+    form {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .field label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #aeb4c7;
+      margin-bottom: 9px;
+    }
+    .field label .req { color: var(--accent); }
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .field input,
+    .field textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 11px;
+      padding: 14px 16px;
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .field input:focus,
+    .field textarea:focus { border-color: var(--accent); }
+    .field input.error,
+    .field textarea.error { border-color: #f87171; }
+    .field textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+    .field-error {
+      font-size: 12.5px;
+      color: #f87171;
+      margin-top: 7px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+    .submit-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 15.5px;
+      padding: 16px 28px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 14px 38px -10px var(--accent);
+      margin-top: 2px;
+      transition: filter 0.15s;
+    }
+    .submit-btn:hover { filter: brightness(1.08); }
+    .form-privacy {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: #7c8398;
+      text-align: center;
+    }
+
+    /* Success state */
+    .success-state {
+      position: relative;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 40px 10px;
+      animation: wtc-pop 0.4s ease-out;
+    }
+    .success-state.visible { display: flex; }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(52,211,153,0.12);
+      border: 1px solid rgba(52,211,153,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .success-state h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-top: 22px;
+    }
+    .success-state p {
+      font-size: 15px;
+      color: #aeb4c7;
+      line-height: 1.6;
+      margin-top: 12px;
+      max-width: 380px;
+    }
+    .reset-btn {
+      margin-top: 26px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.16);
+      color: #e9ebf2;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 12px 22px;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .reset-btn:hover { background: rgba(255,255,255,0.1); }
+
+    /* ── Footer ── */
+    footer {
+      position: relative;
+      z-index: 4;
+      max-width: 1200px;
+      margin: 88px auto 0;
+      padding: 0 32px 44px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding: 56px 0 44px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-brand-text {
+      font-size: 14.5px;
+      color: #9aa0b4;
+      line-height: 1.65;
+      margin: 20px 0 0;
+      max-width: 300px;
+    }
+    .footer-social {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.15s, background 0.15s;
+      text-decoration: none;
+    }
+    .social-btn:hover {
+      border-color: var(--accent);
+      background: rgba(77,124,254,0.08);
+    }
+    .footer-col-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: #7c8398;
+      margin-bottom: 18px;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .footer-link {
+      color: #aeb4c7;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.15s;
+    }
+    .footer-link:hover { color: #fff; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 26px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .footer-legal {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+    .footer-copy {
+      font-size: 13px;
+      color: #7c8398;
+    }
+    .footer-legal-link {
+      font-size: 13px;
+      color: #7c8398;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-legal-link:hover { color: #aeb4c7; }
+    .footer-contact-info {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .footer-contact-info span {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      color: #7c8398;
+    }
+    .footer-contact-info .tagline { color: #565c70; }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- ── NAV ── -->
+  <nav id="main-nav">
+    <a href="WebTech Core.dc.html" class="nav-logo">
+      <svg width="36" height="36" viewBox="0 0 30 30" fill="none" aria-hidden="true">
+        <rect x="3" y="3" width="24" height="24" rx="6" stroke="var(--accent)" stroke-width="1.6"/>
+        <rect x="9.5" y="9.5" width="11" height="11" rx="2" fill="var(--accent)"/>
+        <circle cx="15" cy="15" r="2.4" fill="#06070d"/>
+      </svg>
+      <span class="nav-logo-text">WEBTECH<span>CORE</span></span>
+    </a>
+
+    <div class="nav-links">
+      <a href="WebTech Core.dc.html" class="nav-link">Home</a>
+      <a href="About Us.dc.html" class="nav-link">About</a>
+
+      <!-- Industries dropdown -->
+      <div class="nav-dropdown" id="dd-industries">
+        <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" data-dd="industries">
+          Industries
+          <span class="caret">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5 L6 8 L9.5 4.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+        <div class="dropdown-panel panel-wide" id="panel-industries">
+          <div class="panel-label">INDUSTRIES WE SERVE</div>
+          <div class="panel-grid-4">
+            <a href="Healthcare.dc.html" class="panel-item">
+              <span class="icon">🏥</span>
+              <span><span class="name">Healthcare</span><span class="sub">Clinics, dental, wellness</span></span>
+            </a>
+            <a href="Real Estate.dc.html" class="panel-item">
+              <span class="icon">🏠</span>
+              <span><span class="name">Real Estate</span><span class="sub">Agents, brokers, developers</span></span>
+            </a>
+            <a href="Ecommerce.dc.html" class="panel-item">
+              <span class="icon">🛍️</span>
+              <span><span class="name">E-commerce &amp; Retail</span><span class="sub">Online &amp; omnichannel stores</span></span>
+            </a>
+            <a href="Restaurants.dc.html" class="panel-item">
+              <span class="icon">🍽️</span>
+              <span><span class="name">Restaurants</span><span class="sub">Cafes, dining, franchises</span></span>
+            </a>
+            <a href="Legal.dc.html" class="panel-item">
+              <span class="icon">⚖️</span>
+              <span><span class="name">Legal &amp; Professional</span><span class="sub">Law, finance, consulting</span></span>
+            </a>
+            <a href="Home Services.dc.html" class="panel-item">
+              <span class="icon">🔧</span>
+              <span><span class="name">Home Services</span><span class="sub">Trades, repair, contractors</span></span>
+            </a>
+            <a href="Education.dc.html" class="panel-item">
+              <span class="icon">🎓</span>
+              <span><span class="name">Education</span><span class="sub">Schools, courses, edtech</span></span>
+            </a>
+            <a href="Fitness.dc.html" class="panel-item">
+              <span class="icon">💪</span>
+              <span><span class="name">Fitness &amp; Wellness</span><span class="sub">Gyms, studios, coaches</span></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services dropdown -->
+      <div class="nav-dropdown" id="dd-services">
+        <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" data-dd="services">
+          Services
+          <span class="caret">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5 L6 8 L9.5 4.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+        <div class="dropdown-panel panel-wide" id="panel-services">
+          <div class="panel-label">WHAT WE DO</div>
+          <div class="panel-grid-4">
+            <a href="SEO.dc.html" class="panel-item">
+              <span class="icon">🔍</span>
+              <span><span class="name">Search Engine Optimization</span><span class="sub">Organic growth</span></span>
+            </a>
+            <a href="Local SEO.dc.html" class="panel-item">
+              <span class="icon">📍</span>
+              <span><span class="name">Local SEO</span><span class="sub">Map &amp; near-me</span></span>
+            </a>
+            <a href="PPC.dc.html" class="panel-item">
+              <span class="icon">🎯</span>
+              <span><span class="name">Paid Advertising (PPC)</span><span class="sub">Google ads</span></span>
+            </a>
+            <a href="Social Media.dc.html" class="panel-item">
+              <span class="icon">📱</span>
+              <span><span class="name">Social Media Marketing</span><span class="sub">Build audience</span></span>
+            </a>
+            <a href="Meta Ads.dc.html" class="panel-item">
+              <span class="icon">⚡</span>
+              <span><span class="name">Meta Ads Services</span><span class="sub">FB &amp; Instagram</span></span>
+            </a>
+            <a href="Content Marketing.dc.html" class="panel-item">
+              <span class="icon">✍️</span>
+              <span><span class="name">Content Marketing</span><span class="sub">Blogs &amp; assets</span></span>
+            </a>
+            <a href="Email Marketing.dc.html" class="panel-item">
+              <span class="icon">✉️</span>
+              <span><span class="name">Email Marketing</span><span class="sub">Flows &amp; campaigns</span></span>
+            </a>
+            <a href="Web Design.dc.html" class="panel-item">
+              <span class="icon">🖥️</span>
+              <span><span class="name">Web Design &amp; Development</span><span class="sub">Design &amp; build</span></span>
+            </a>
+            <a href="Graphics Design.dc.html" class="panel-item">
+              <span class="icon">🎨</span>
+              <span><span class="name">Graphics Designing</span><span class="sub">Brand visuals</span></span>
+            </a>
+          </div>
+          <a href="Services.dc.html" class="panel-footer-link">VIEW ALL SERVICES →</a>
+        </div>
+      </div>
+
+      <!-- Resources dropdown -->
+      <div class="nav-dropdown" id="dd-resources">
+        <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" data-dd="resources">
+          Resources
+          <span class="caret">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5 L6 8 L9.5 4.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </button>
+        <div class="dropdown-panel panel-resources" id="panel-resources">
+          <div class="panel-label">RESOURCES</div>
+          <div class="panel-grid-1">
+            <a href="Blog.dc.html" class="panel-item">
+              <span class="icon">📝</span>
+              <span><span class="name">Blog</span><span class="sub">Insights &amp; guides</span></span>
+            </a>
+            <a href="Press Release.dc.html" class="panel-item">
+              <span class="icon">📰</span>
+              <span><span class="name">Press Release</span><span class="sub">News &amp; announcements</span></span>
+            </a>
+            <a href="Case Studies.dc.html" class="panel-item">
+              <span class="icon">📊</span>
+              <span><span class="name">Case Studies</span><span class="sub">Real client results</span></span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <a href="contact-us.html" class="nav-cta">Book Free Consultation</a>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <header class="hero" id="contact">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      GET IN TOUCH
+    </div>
+    <h1>Let's talk about <span class="gradient">growing your business.</span></h1>
+    <p>Tell us what you need and we'll get back to you within 48 hours with a free audit and a clear next step.</p>
+  </header>
+
+  <!-- ── CONTACT BODY ── -->
+  <section class="contact-body">
+    <div class="contact-grid">
+
+      <!-- Left: info cards -->
+      <div class="info-cards">
+        <div class="info-card">
+          <span class="info-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="5" width="18" height="14" rx="3" stroke="var(--accent)" stroke-width="1.7"/>
+              <path d="M4 7 L12 13 L20 7" stroke="var(--accent)" stroke-width="1.7" fill="none" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div>
+            <div class="info-card-label">EMAIL US</div>
+            <div class="info-card-value">info@webtechcore.io</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <span class="info-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M5 4 h4 l2 5 -2.5 1.5 a11 11 0 0 0 5 5 L16 13 l5 2 v4 a1 1 0 0 1 -1 1 A16 16 0 0 1 4 5 a1 1 0 0 1 1 -1 Z" stroke="var(--accent)" stroke-width="1.7" fill="none" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <div>
+            <div class="info-card-label">CALL US</div>
+            <div class="info-card-value">+91 9110170824</div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <span class="info-card-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 21 C7 16 4 12.5 4 9 a8 8 0 0 1 16 0 C20 12.5 17 16 12 21 Z" stroke="var(--accent)" stroke-width="1.7" fill="none" stroke-linejoin="round"/>
+              <circle cx="12" cy="9" r="2.4" stroke="var(--accent)" stroke-width="1.7"/>
+            </svg>
+          </span>
+          <div>
+            <div class="info-card-label">VISIT US</div>
+            <div class="info-card-value">Across India &amp; the US</div>
+          </div>
+        </div>
+
+        <div class="reply-card">
+          <div class="reply-badge">
+            <span class="reply-dot"></span>
+            <span class="reply-badge-text">REPLY IN 48 HOURS</span>
+          </div>
+          <p>Every enquiry gets a free marketing audit — no obligation, no sales pressure.</p>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="form-card">
+        <div class="form-card-glow"></div>
+
+        <!-- Success state (hidden initially) -->
+        <div class="success-state" id="success-state">
+          <div class="success-icon">
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+              <path d="M8 17 L14 23 L26 10" stroke="#34d399" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h2>Thanks, <span id="success-name">there</span> — message received.</h2>
+          <p>Our team will review your requirement and reply within 48 hours with your free audit. Keep an eye on your inbox.</p>
+          <button class="reset-btn" id="reset-btn">Send another message</button>
+        </div>
+
+        <!-- Contact form -->
+        <form id="contact-form" novalidate>
+          <div class="field">
+            <label for="name">FULL NAME <span class="req">*</span></label>
+            <input type="text" id="name" name="name" placeholder="Jane Cooper" autocomplete="name">
+            <div class="field-error" id="err-name">Please enter your name.</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="email">EMAIL <span class="req">*</span></label>
+              <input type="email" id="email" name="email" placeholder="jane@business.com" autocomplete="email">
+              <div class="field-error" id="err-email">Please enter your email.</div>
+            </div>
+            <div class="field">
+              <label for="mobile">MOBILE <span class="req">*</span></label>
+              <input type="tel" id="mobile" name="mobile" placeholder="+1 555 012 3400" autocomplete="tel">
+              <div class="field-error" id="err-mobile">Please enter your mobile.</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="requirement">YOUR REQUIREMENT <span class="req">*</span></label>
+            <textarea id="requirement" name="requirement" rows="4" placeholder="Tell us what you're looking for — SEO, ads, a new website, more leads…"></textarea>
+            <div class="field-error" id="err-req">Tell us what you need.</div>
+          </div>
+
+          <button type="submit" class="submit-btn">Send Message &amp; Get Free Audit →</button>
+          <p class="form-privacy">We respect your privacy. No spam, ever.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <a href="WebTech Core.dc.html" class="nav-logo">
+          <svg width="34" height="34" viewBox="0 0 30 30" fill="none">
+            <rect x="3" y="3" width="24" height="24" rx="6" stroke="var(--accent)" stroke-width="1.6"/>
+            <rect x="9.5" y="9.5" width="11" height="11" rx="2" fill="var(--accent)"/>
+            <circle cx="15" cy="15" r="2.4" fill="#06070d"/>
+          </svg>
+          <span class="nav-logo-text" style="font-size:19px;">WEBTECH<span>CORE</span></span>
+        </a>
+        <p class="footer-brand-text">The complete digital marketing partner for small businesses ready to grow — SEO, ads, social, web, and content under one roof.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M14 8 h2 V5 h-2.5 C12 5 11 6 11 7.5 V9 H9 v3 h2 v7 h3 v-7 h2.2 l.5-3 H14 V8 Z" fill="#aeb4c7"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="X (Twitter)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 5 l6 7 -6 7 h2 l5-5.8 L16 19 h4 l-6.4-7.6 L19.5 5 h-2 l-4.6 5.4 L8 5 Z" fill="#aeb4c7"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="4.5" stroke="#aeb4c7" stroke-width="1.6"/><circle cx="12" cy="12" r="3.6" stroke="#aeb4c7" stroke-width="1.6"/><circle cx="16.5" cy="7.5" r="1" fill="#aeb4c7"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="LinkedIn">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3.5" stroke="#aeb4c7" stroke-width="1.6"/><line x1="8" y1="10.5" x2="8" y2="17" stroke="#aeb4c7" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="7.5" r="1.1" fill="#aeb4c7"/><path d="M11.5 17 v-4 a2.5 2.5 0 0 1 5 0 v4 M11.5 13 v4" stroke="#aeb4c7" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-label">SERVICES</div>
+        <div class="footer-links">
+          <a href="SEO.dc.html" class="footer-link">Search Engine Optimization</a>
+          <a href="PPC.dc.html" class="footer-link">Paid Advertising</a>
+          <a href="Social Media.dc.html" class="footer-link">Social Media</a>
+          <a href="Web Design.dc.html" class="footer-link">Web Design</a>
+          <a href="Services.dc.html" class="footer-link">View all services →</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-label">INDUSTRIES</div>
+        <div class="footer-links">
+          <a href="Healthcare.dc.html" class="footer-link">Healthcare</a>
+          <a href="Real Estate.dc.html" class="footer-link">Real Estate</a>
+          <a href="Ecommerce.dc.html" class="footer-link">E-commerce</a>
+          <a href="Restaurants.dc.html" class="footer-link">Restaurants</a>
+          <a href="Home Services.dc.html" class="footer-link">Home Services</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-label">COMPANY</div>
+        <div class="footer-links">
+          <a href="About Us.dc.html" class="footer-link">About Us</a>
+          <a href="Case Studies.dc.html" class="footer-link">Case Studies</a>
+          <a href="Blog.dc.html" class="footer-link">Blog</a>
+          <a href="Press Release.dc.html" class="footer-link">Press</a>
+          <a href="contact-us.html" class="footer-link">Contact</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <span class="footer-copy">© 2026 WebTech Core. All rights reserved.</span>
+        <a href="Privacy Policy.dc.html" class="footer-legal-link">Privacy Policy</a>
+        <a href="Terms and Conditions.dc.html" class="footer-legal-link">Terms &amp; Conditions</a>
+      </div>
+      <div class="footer-contact-info">
+        <span>info@webtechcore.io</span>
+        <span>+91 9110170824</span>
+        <span class="tagline">Engineered for growth.</span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+  /* ── Dropdown logic ── */
+  (function () {
+    const nav = document.getElementById('main-nav');
+    const dropdowns = {
+      industries: {
+        wrapper: document.getElementById('dd-industries'),
+        panel:   document.getElementById('panel-industries'),
+        btn:     document.querySelector('[data-dd="industries"]'),
+      },
+      services: {
+        wrapper: document.getElementById('dd-services'),
+        panel:   document.getElementById('panel-services'),
+        btn:     document.querySelector('[data-dd="services"]'),
+      },
+      resources: {
+        wrapper: document.getElementById('dd-resources'),
+        panel:   document.getElementById('panel-resources'),
+        btn:     document.querySelector('[data-dd="resources"]'),
+      },
+    };
+
+    let openKey = null;
+
+    function positionWidePanel(panel) {
+      // Anchor wide panels (Industries, Services) to nav's left edge
+      const navRect = nav.getBoundingClientRect();
+      const wrapRect = panel.parentElement.getBoundingClientRect();
+      panel.style.left = (navRect.left - wrapRect.left) + 'px';
+    }
+
+    function open(key) {
+      if (openKey === key) return;
+      closeAll();
+      openKey = key;
+      const dd = dropdowns[key];
+      dd.panel.classList.add('open');
+      dd.btn.classList.add('open');
+      dd.btn.setAttribute('aria-expanded', 'true');
+      if (key === 'industries' || key === 'services') {
+        positionWidePanel(dd.panel);
+      }
+    }
+
+    function closeAll() {
+      for (const key of Object.keys(dropdowns)) {
+        const dd = dropdowns[key];
+        dd.panel.classList.remove('open');
+        dd.btn.classList.remove('open');
+        dd.btn.setAttribute('aria-expanded', 'false');
+      }
+      openKey = null;
+    }
+
+    for (const [key, dd] of Object.entries(dropdowns)) {
+      // Hover
+      dd.wrapper.addEventListener('mouseenter', () => open(key));
+      dd.wrapper.addEventListener('mouseleave', closeAll);
+      // Click toggle
+      dd.btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openKey === key ? closeAll() : open(key);
+      });
+    }
+
+    document.addEventListener('click', closeAll);
+
+    // Re-position wide panels on resize
+    window.addEventListener('resize', () => {
+      if (openKey === 'industries' || openKey === 'services') {
+        positionWidePanel(dropdowns[openKey].panel);
+      }
+    });
+  })();
+
+  /* ── Form validation & submission ── */
+  (function () {
+    const form        = document.getElementById('contact-form');
+    const successEl   = document.getElementById('success-state');
+    const successName = document.getElementById('success-name');
+    const resetBtn    = document.getElementById('reset-btn');
+
+    const fields = {
+      name:        document.getElementById('name'),
+      email:       document.getElementById('email'),
+      mobile:      document.getElementById('mobile'),
+      requirement: document.getElementById('requirement'),
+    };
+    const errors = {
+      name:        document.getElementById('err-name'),
+      email:       document.getElementById('err-email'),
+      mobile:      document.getElementById('err-mobile'),
+      requirement: document.getElementById('err-req'),
+    };
+
+    function validate() {
+      const errs = {};
+      const v = {
+        name:        fields.name.value.trim(),
+        email:       fields.email.value.trim(),
+        mobile:      fields.mobile.value.trim(),
+        requirement: fields.requirement.value.trim(),
+      };
+      if (!v.name)    errs.name = 'Please enter your name.';
+      if (!v.email)   errs.email = 'Please enter your email.';
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) errs.email = 'Enter a valid email address.';
+      if (!v.mobile)  errs.mobile = 'Please enter your mobile.';
+      else if (v.mobile.replace(/[^0-9]/g, '').length < 7) errs.mobile = 'Enter a valid mobile number.';
+      if (!v.requirement) errs.requirement = 'Tell us what you need.';
+      return errs;
+    }
+
+    function showErrors(errs) {
+      for (const key of Object.keys(fields)) {
+        const hasErr = !!errs[key];
+        fields[key].classList.toggle('error', hasErr);
+        errors[key].textContent = errs[key] || '';
+        errors[key].classList.toggle('visible', hasErr);
+      }
+    }
+
+    let attempted = false;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      attempted = true;
+      const errs = validate();
+      showErrors(errs);
+      if (Object.keys(errs).length > 0) return;
+
+      // Success
+      const firstName = fields.name.value.trim().split(' ')[0] || 'there';
+      successName.textContent = firstName;
+      form.style.display = 'none';
+      successEl.classList.add('visible');
+    });
+
+    // Live re-validation after first submit attempt
+    for (const key of Object.keys(fields)) {
+      fields[key].addEventListener('input', function () {
+        if (!attempted) return;
+        const errs = validate();
+        showErrors(errs);
+      });
+    }
+
+    resetBtn.addEventListener('click', function () {
+      attempted = false;
+      for (const key of Object.keys(fields)) {
+        fields[key].value = '';
+        fields[key].classList.remove('error');
+        errors[key].classList.remove('visible');
+      }
+      successEl.classList.remove('visible');
+      form.style.display = '';
+    });
+  })();
+</script>
+</body>
+</html>
