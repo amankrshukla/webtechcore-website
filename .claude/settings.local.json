@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/amanshukla/Downloads/webtechcore-website-main status)",
+      "Bash(git -C /Users/amanshukla/Downloads/webtechcore-website-main remote -v)",
+      "Bash(gh auth *)"
+    ]
+  }
+}
