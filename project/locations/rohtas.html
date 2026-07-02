@@ -97,6 +97,18 @@ details summary::-webkit-details-marker{display:none;}
       </div>
       <a href="../services/index.html" class="dd-all">VIEW ALL SERVICES →</a>
     </div>
+    <div class="dd-wrap" id="dd-countries" style="position:relative;">
+      <button class="nav-btn" onclick="toggleMenu('countries',false)" aria-expanded="false" aria-controls="panel-countries">Countries <span class="nav-caret" id="caret-countries"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+      <div class="dd-panel-rel" id="panel-countries">
+        <div class="dd-label">COUNTRIES</div>
+        <div class="dd-col">
+          <a href="india.html" class="dd-item"><span class="dd-item-icon">🇮🇳</span><span><span class="dd-item-name">India</span><span class="dd-item-sub">Live · all states</span></span></a>
+          <a href="usa.html" class="dd-item"><span class="dd-item-icon">🇺🇸</span><span><span class="dd-item-name">USA</span><span class="dd-item-sub">Launching soon</span></span></a>
+          <a href="uk.html" class="dd-item"><span class="dd-item-icon">🇬🇧</span><span><span class="dd-item-name">UK</span><span class="dd-item-sub">Launching soon</span></span></a>
+          <a href="singapore.html" class="dd-item"><span class="dd-item-icon">🇸🇬</span><span><span class="dd-item-name">Singapore</span><span class="dd-item-sub">Launching soon</span></span></a>
+        </div>
+      </div>
+    </div>
     <div class="dd-wrap" id="dd-resources" style="position:relative;">
       <button class="nav-btn" onclick="toggleMenu('resources',false)" aria-expanded="false" aria-controls="panel-resources">Resources <span class="nav-caret" id="caret-resources"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
       <div class="dd-panel-rel" id="panel-resources">
@@ -382,13 +394,13 @@ details summary::-webkit-details-marker{display:none;}
 (function(){
   var activeMenu=null;
   function positionWide(id){var p=document.getElementById(id),n=document.querySelector('.nav');if(!n||!p)return;var r=n.getBoundingClientRect();p.style.left=(r.left+32)+'px';p.style.top=(r.bottom+8)+'px';p.style.width=Math.min(980,r.width-64)+'px';}
-  function closeAll(){['industries','services'].forEach(function(id){var p=document.getElementById('panel-'+id),w=document.getElementById('dd-'+id);if(p)p.classList.remove('open');if(w){var b=w.querySelector('.nav-btn');if(b)b.setAttribute('aria-expanded','false');}});var pr=document.getElementById('panel-resources');if(pr)pr.classList.remove('open');var dr=document.getElementById('dd-resources');if(dr){var br=dr.querySelector('.nav-btn');if(br)br.setAttribute('aria-expanded','false');}activeMenu=null;}
+  function closeAll(){['industries','services','countries'].forEach(function(id){var p=document.getElementById('panel-'+id),w=document.getElementById('dd-'+id);if(p)p.classList.remove('open');if(w){var b=w.querySelector('.nav-btn');if(b)b.setAttribute('aria-expanded','false');}});var pr=document.getElementById('panel-resources');if(pr)pr.classList.remove('open');var dr=document.getElementById('dd-resources');if(dr){var br=dr.querySelector('.nav-btn');if(br)br.setAttribute('aria-expanded','false');}activeMenu=null;}
   window.closeAll=closeAll;
   function openMenu(id,wide){closeAll();var p=document.getElementById('panel-'+id),w=document.getElementById('dd-'+id);if(!p)return;p.classList.add('open');if(w){var b=w.querySelector('.nav-btn');if(b)b.setAttribute('aria-expanded','true');}if(wide)positionWide('panel-'+id);activeMenu=id;}
   window.openMenu=openMenu;
   function toggleMenu(id,wide){if(activeMenu===id)closeAll();else openMenu(id,wide);}
   window.toggleMenu=toggleMenu;
-  document.addEventListener('click',function(e){if(!e.target.closest('#dd-industries')&&!e.target.closest('#panel-industries')&&!e.target.closest('#dd-services')&&!e.target.closest('#panel-services')&&!e.target.closest('#dd-resources')&&!e.target.closest('#panel-resources'))closeAll();});
+  document.addEventListener('click',function(e){if(!e.target.closest('#dd-industries')&&!e.target.closest('#panel-industries')&&!e.target.closest('#dd-services')&&!e.target.closest('#panel-services')&&!e.target.closest('#dd-resources')&&!e.target.closest('#panel-resources')&&!e.target.closest('#dd-countries')&&!e.target.closest('#panel-countries'))closeAll();});
   window.addEventListener('resize',function(){if(activeMenu==='industries')positionWide('panel-industries');if(activeMenu==='services')positionWide('panel-services');});
 })();
 </script>
