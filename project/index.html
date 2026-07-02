@@ -45,7 +45,7 @@ body{background:#06070d;color:#e9ebf2;font-family:'Manrope',sans-serif;-webkit-f
 .dropdown-panel{display:none;position:absolute;z-index:30;padding:16px;background:rgba(14,16,28,.97);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.12);border-radius:16px;box-shadow:0 24px 60px -18px rgba(0,0,0,.7);animation:wtc-fadein .18s ease-out;}
 .dropdown-panel.open{display:block;}
 #panel-industries,#panel-services{position:fixed;max-width:calc(100vw - 64px);}
-#panel-resources{top:34px;left:0;width:320px;max-width:90vw;}
+#panel-resources,#panel-countries{top:34px;left:0;width:320px;max-width:90vw;}
 .dropdown-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:#7c8398;padding:6px 12px 12px;}
 .dd-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
 .dd-grid1{display:grid;grid-template-columns:1fr;gap:4px;}
@@ -282,6 +282,15 @@ footer{position:relative;z-index:4;max-width:1200px;margin:88px auto 0;padding:0
       </div>
     </div>
 
+    <div class="nav-dropdown" id="dd-countries">
+      <button class="nav-btn" aria-expanded="false" aria-controls="panel-countries">Countries<span class="nav-caret"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5 L6 8 L9.5 4.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+      <div class="dropdown-panel" id="panel-countries" role="menu">
+        <div class="dropdown-label">COUNTRIES</div>
+        <div class="dd-grid1">
+          <a href="locations/india.html" class="dd-item"><span class="dd-icon">🇮🇳</span><span><span class="dd-title">India</span><span class="dd-sub">Live · all states</span></span></a><a href="locations/usa.html" class="dd-item"><span class="dd-icon">🇺🇸</span><span><span class="dd-title">USA</span><span class="dd-sub">Launching soon</span></span></a><a href="locations/uk.html" class="dd-item"><span class="dd-icon">🇬🇧</span><span><span class="dd-title">UK</span><span class="dd-sub">Launching soon</span></span></a><a href="locations/singapore.html" class="dd-item"><span class="dd-icon">🇸🇬</span><span><span class="dd-title">Singapore</span><span class="dd-sub">Launching soon</span></span></a></div>
+      </div>
+    </div>
     <div class="nav-dropdown" id="dd-resources">
       <button class="nav-btn" aria-expanded="false" aria-controls="panel-resources">
         Resources <span class="nav-caret"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5 L6 8 L9.5 4.5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
@@ -716,6 +725,12 @@ footer{position:relative;z-index:4;max-width:1200px;margin:88px auto 0;padding:0
   resDd.addEventListener('mouseenter',function(){if(!activeMenu)openMenu('resources',false);});
   resDd.addEventListener('mouseleave',closeAll);
   document.getElementById('panel-resources').addEventListener('mouseleave',closeAll);
+  var couDd=document.getElementById('dd-countries');
+  if(couDd){var couBtn=couDd.querySelector('.nav-btn');
+  couBtn.addEventListener('click',function(){activeMenu==='countries'?closeAll():openMenu('countries',false);});
+  couDd.addEventListener('mouseenter',function(){if(!activeMenu)openMenu('countries',false);});
+  couDd.addEventListener('mouseleave',closeAll);
+  document.getElementById('panel-countries').addEventListener('mouseleave',closeAll);}
 
   document.addEventListener('click',function(e){if(!e.target.closest('.nav-dropdown'))closeAll();});
   window.addEventListener('resize',function(){
